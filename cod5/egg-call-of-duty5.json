@@ -1,0 +1,102 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2024-12-04T13:37:06+01:00",
+    "name": "Call of Duty 5",
+    "author": "remet@gmx.net",
+    "description": "Call of Duty Server for Pterodactyl.",
+    "features": null,
+    "docker_images": {
+        "quay.io\/parkervcp\/pterodactyl-images:base_debian": "quay.io\/parkervcp\/pterodactyl-images:base_debian"
+    },
+    "file_denylist": [],
+    "startup": ".\/codwaw_lnxded +set dedicated \"{{SERVER_MODE}}\" +set fs_basepath \"{{GAME_FILE_PATH}}\" +set fs_homepath . +set fs_game \"{{SERVER_MODS}}\" +exec \"{{SERVER_CONFIG_FILE}}\" +set net_ip 0.0.0.0 +set net_port \"{{SERVER_PORT}}\" +map_rotate",
+    "config": {
+        "files": "{}",
+        "startup": "{\r\n    \"done\": \"Session creation complete!\",\r\n    \"userInteraction\": []\r\n}",
+        "logs": "[]",
+        "stop": "quit"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/ash\r\n# CoD 5 Installation script\r\n#\r\n# Server Files: \/mnt\/server\r\n\r\nmkdir -p \/mnt\/server\/\r\nmkdir -p \/mnt\/server\/main\r\ncd \/mnt\/server\/\r\n\r\n## download files\r\nDOWNLOAD_LINK=https:\/\/raw.githubusercontent.com\/moalti\/pterodactyl-call-of-duty-eggs\/main\/cod5\/codwaw_lnxded.zip\r\n\r\n# Download the server binaries\r\necho -e \"running 'curl -sSL ${DOWNLOAD_LINK} -o ${DOWNLOAD_LINK##*\/}'\" \r\ncurl -sSL ${DOWNLOAD_LINK} -o ${DOWNLOAD_LINK##*\/}\r\n\r\necho -e \"Unpacking server files\"\r\nunzip ${DOWNLOAD_LINK##*\/}\r\n\r\n#make server bin executable\r\nchmod 755 .\/codwaw_lnxded\r\nchmod 755 .\/codwaw_lnxded-bin\r\n\r\necho -e \"Generating config file\"\r\ncat <<EOF > .\/main\/server.cfg\r\n\/\/******************************************************************************\r\n\/\/ Color Codes\r\n\/\/******************************************************************************\r\n\/\/ Colors for text. Do not clear the comment in front of the color codes.\r\n\/\/ Useful for your server name, motd msg's - Information and ref use only \r\n\/\/ \r\n\/\/ ^1 = Red \r\n\/\/ ^2 = Green\r\n\/\/ ^3 = Yellow\r\n\/\/ ^4 = Blue\r\n\/\/ ^5 = Cyan\r\n\/\/ ^6 = pink\/Magenta\r\n\/\/ ^7 = White\r\n\/\/ ^0 = Black\r\n\/\/******************************************************************************\r\n\/\/ Public Information\r\n\/\/******************************************************************************\r\nsets sv_hostname \"${SERVER_NAME}\"\r\nsets _admin \"My Name\"\r\nsets _website \"My URL\"\r\nsets _location \"My Location\"\r\nsets _irc \"\"\r\nsets _mod \"\"\r\nsets _modver \"\"\r\nsets _modupdate \"\"\r\nset scr_motd \"My Message of the Day!\"\r\n\/\/******************************************************************************\r\n\/\/ Common Server Settings\r\n\/\/******************************************************************************\r\n\/\/ Password Settings\r\nset rcon_password \"${ADMIN_PASSWORD}\"\r\nset sv_privatepassword \"\"\r\nset g_password \"${SERVER_PASSWORD}\"\r\n\/\/ Player slots setup\r\nset sv_maxclients \"24\"\r\nset sv_privateclients \"4\"\r\n\/\/ Players\r\nset scr_player_maxhealth \"100\"\r\nset scr_player_suicidespawndelay \"5\"\r\nset scr_player_healthregentime \"5\"\r\nset scr_player_forcerespawn \"1\"\r\nset scr_player_sprinttime \"5\"\r\nset g_allowvote \"1\"\r\nset scr_teambalance \"0\"\r\n\/\/ Teams\r\nset scr_team_fftype \"0\"\r\nset scr_team_teamkillspawndelay \"10\"\r\nset scr_team_kickteamkillers \"0\"\r\n\/\/ Ping\r\nset sv_minping \"0\"\r\nset sv_maxping \"500\"\r\n\/\/ Log Settings\r\nset g_logsync \"1\"\r\nset logfile \"1\"\r\nset g_log \"games_mp.log\"\r\nset sv_log_damage \"1\"\r\n\/\/ Network options\r\nset com_hunkmegs \"250\"\r\nset net_noipx \"1\"\r\n\/\/ Client Download Settings. (0=off\/1=on) Used for MODs and custom maps\r\nset sv_allowdownload \"1\"\r\nseta sv_wwwdownload \"0\"\r\nseta sv_wwwbaseurl \"URL\"\r\nseta sv_wwwdldisconnected \"0\"\r\n\/\/ Rate\r\nset sv_maxrate \"25000\"\r\n\/\/ FPS\r\nset sv_fps \"20\"\r\n\/\/ Drop inactive players\r\nset sv_timeout \"300\"\r\nset sv_zombietime \"1\"\r\nset g_inactivity \"0\"\r\nset g_inactivityspectator \"0\"\r\n\/\/ AntiFlooding Settings\r\nset sv_floodprotect \"1\"\r\nset sv_reconnectlimit \"3\"\r\n\/\/ Anti Cheat Settings\r\nset sv_disableclientconsole \"0\"\r\nset cl_autocmd \"0\"\r\nset sv_cheats \"0\"\r\nset sv_pure \"1\"\r\nset g_banips \"\"\r\nset g_no_script_spam \"1\"\r\nset sv_punkbuster \"0\"\r\n\/\/ Temporary Ban duration, in seconds\r\nset sv_kickbantime \"3600\"\r\n\/\/ In-game voice communication system\r\nset sv_voice \"0\"\r\nset sv_voicequality \"4\"\r\nset voice_deadchat \"0\"\r\nset voice_global \"0\"\r\nset voice_localecho \"0\"\r\nset winvoice_mic_mute \"1\"\r\n\/\/******************************************************************************\r\n\/\/ Gameplay \r\n\/\/******************************************************************************\r\nset scr_game_allowkillcam \"1\"\r\nset scr_game_onlyheadshots \"0\"\r\nset scr_game_deathpointloss \"0\"\r\nset scr_game_suicidepointloss \"0\"\r\nset scr_team_teamkillpointloss \"1\"\r\nset scr_game_spectatetype \"1\"\r\nset scr_game_forceuav \"\"\r\nset scr_game_hardpoints \"1\"\r\n\/\/******************************************************************************\r\n\/\/ Hardpoints (Kill Streaks - 1 = allow, 0 = disallow) \r\n\/\/******************************************************************************\r\nset scr_hardpoint_allowartillery \"1\"\r\nset scr_hardpoint_allowuav \"1\"\r\nset scr_hardpoint_allowdogs \"1\"\r\n\/\/******************************************************************************\r\n\/\/ Misc \r\n\/\/******************************************************************************\r\nset sv_allowanonymous \"0\"\r\nset g_antilag \"1\"\r\nset g_compassshowenemies \"0\"\r\nset ui_maxclients \"32\"\r\n\/\/******************************************************************************\r\n\/\/ Gametypes \r\n\/\/******************************************************************************\r\n\/\/ DEATHMATCH\r\nset scr_dm_scorelimit \"150\"\r\nset scr_dm_timelimit \"15\"\r\nset scr_dm_roundlimit \"1\"\r\nset scr_dm_numlives \"0\"\r\nset scr_dm_playerrespawndelay \"0\"\r\nset scr_dm_waverespawndelay \"0\"\r\n\/\/ TEAM DEATHMATCH\r\nset scr_tdm_scorelimit \"600\"\r\nset scr_tdm_timelimit \"15\"\r\nset scr_tdm_roundlimit \"1\"\r\nset scr_tdm_numlives \"0\"\r\nset scr_tdm_playerrespawndelay \"0\"\r\nset scr_tdm_waverespawndelay \"0\"\r\n\/\/ CAPTURE THE FLAG\r\nset scr_ctf_scorelimit \"8\"\r\nset scr_ctf_timelimit \"15\"\r\nset scr_ctf_roundlimit \"1\"\r\nset scr_ctf_numlives \"0\"\r\nset scr_ctf_playerrespawndelay \"0\"\r\nset scr_ctf_waverespawndelay \"0\"\r\nset scr_ctf_roundswitch \"0\"\r\nset scr_ctf_touchreturn \"1\"\r\nset scr_ctf_idleflagreturntime \"0\"\r\nset scr_ctf_enemycarriervisible \"0\"\r\n\/\/ WAR\r\nset scr_twar_scorelimit \"5\"\r\nset scr_twar_timelimit \"10\"\r\nset scr_twar_roundlimit \"2\"\r\nset scr_twar_numlives \"0\"\r\nset scr_twar_roundswitch \"1\"\r\nset scr_twar_capturetime \"\"\r\nset twar_finalfightflagrespawnpenalty \"3\"\r\nset twar_finalfighttimelimit \"5\"\r\nset twar_momentumenabled \"1\"\r\nset twar_momentumkillplayer \"5\"\r\nset twar_momentumblitzkriegtime \"30\"\r\nset twar_momentumflagcap \"20\"\r\nset twar_momentumradar \"10\"\r\nset twar_momentumartillery \"10\"\r\nset twar_momentumdogs \"10\"\r\nset twar_momentummax \"70\"\r\n\/\/ DOMINATION\r\nset scr_dom_scorelimit \"300\"\r\nset scr_dom_timelimit \"15\"\r\nset scr_dom_roundlimit \"1\"\r\nset scr_dom_numlives \"0\"\r\nset scr_dom_playerrespawndelay \"0\"\r\nset scr_dom_waverespawndelay \"0\"\r\n\/\/ SABOTAGE\r\nset scr_sab_scorelimit \"3\"\r\nset scr_sab_timelimit \"20\"\r\nset scr_sab_roundlimit \"5\"\r\nset scr_sab_numlives \"0\"\r\nset scr_sab_playerrespawndelay \"0\"\r\nset scr_sab_waverespawndelay \"0\"\r\nset scr_sab_roundswitch \"1\"\r\nset scr_sab_bombtimer \"45\"\r\nset scr_sab_planttime \"5\"\r\nset scr_sab_defusetime \"5\"\r\nset scr_sab_hotpotato \"0\"\r\n\/\/ SEARCH & DESTROY\r\nset scr_sd_scorelimit \"4\"\r\nset scr_sd_timelimit \"2.5\"\r\nset scr_sd_roundlimit \"0\"\r\nset scr_sd_numlives \"1\"\r\nset scr_sd_playerrespawndelay \"0\"\r\nset scr_sd_waverespawndelay \"0\"\r\nset scr_sd_roundswitch \"2\"\r\nset scr_sd_bombtimer \"45\"\r\nset scr_sd_planttime \"5\"\r\nset scr_sd_defusetime \"5\"\r\nset scr_sd_multibomb \"0\"\r\n\/\/ KING OF THE HILL (HEADQUARTERS)\r\nset scr_koth_scorelimit \"300\"\r\nset scr_koth_timelimit \"15\"\r\nset scr_koth_roundlimit \"1\"\r\nset scr_koth_numlives \"0\"\r\nset scr_koth_playerrespawndelay \"0\"\r\nset scr_koth_waverespawndelay \"0\"\r\nset scr_koth_roundswitch \"0\"\r\nset koth_autodestroytime \"0\"\r\nset koth_spawntime \"0\"\r\nset koth_kothmode \"0\"\r\nset koth_capturetime \"10\"\r\nset koth_destroytime \"5\"\r\nset koth_delayplayer \"0\"\r\nset koth_spawndelay \"0\"\r\n\/\/******************************************************************************\r\n\/\/ UI\r\n\/\/******************************************************************************\r\nset scr_hardcore \"0\"\r\nset ui_hud_obituaries \"1\"\r\nset ui_hud_showobjicons \"1\"\r\n\/\/******************************************************************************\r\n\/\/ Map Rotation\r\n\/\/******************************************************************************\r\nset sv_maprotation \"gametype dm map mp_downfall gametype dm map mp_dome gametype dm map mp_airfield gametype dm map mp_castle gametype dm map mp_courtyard gametype dm map mp_makin_day gametype dm map mphangar gametype dm map mp_suburban gametype dm map mp_makin gametype dm map mp_asylum gametype dm map mp_rondhouse gametype dm map mp_seelow gametype dm map mp_outskirts gametype dm map mp_roundhouse gametype dm map mp_shrine\"\r\n\/\/******************************************************************************\r\n\/\/ Additional DVAR's\r\n\/\/******************************************************************************\r\n\/\/ There are simply too many DVAR's for AGrcon to explicitly list and index \r\n\/\/ for you. All additional DVAR's (such as weapon configs and player configs) are \r\n\/\/ listed below.\r\n\/\/ WEAPONS \/ ATTACHMENTS\r\n\/\/ CLASS CONFIGs\r\n\/\/ PERKS CONFIG\r\nset perk_weapreloadmultiplier \"0.5\"\r\nset perk_grenadetossbacktimer \"2500\"\r\nset perk_vehiclereloadreduction \"0.7\"\r\nset perk_parabolicangle \"180\"\r\nset perk_weapratemultiplier \"0.75\"\r\nset perk_flakjacketmaxdamage \"75\"\r\nset perk_extrabreath \"5\"\r\nset perk_fireproof \"55\"\r\nset perk_sprintmultiplier \"2\"\r\nset perk_weapspreadmultiplier \"0.65\"\r\nset perk_overheatreduction \"0.7\"\r\nset perk_bulletpenetrationmultiplier \"2\"\r\nset perk_altmeleelerptime \"40\"\r\nset perk_grenadedeath \"frag_grenade_short_mp\"\r\nset perk_turretrotspeedmultiplier \"1.25\"\r\nset perk_explosivedamage \"25\"\r\nset perk_altmeleedamage \"200\"\r\nset perk_bulletdamage \"40\"\r\nset perk_flakjacket \"75\"\r\nset perk_armorvest \"75\"\r\nset perk_parabolicicon \"specialty_parabolic\"\r\nset perk_parabolicradius \"400\"\r\nEOF\r\necho -e \"Installation complete\"",
+            "container": "quay.io\/matthewp\/pterodactyl:alpine-install",
+            "entrypoint": "ash"
+        }
+    },
+    "variables": [
+        {
+            "name": "Server Network Mode",
+            "description": "1 for LAN only, 2 for public",
+            "env_variable": "SERVER_NETWORK_MODE",
+            "default_value": "2",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|digits:1|min:1|max:2",
+            "field_type": "text"
+        },
+        {
+            "name": "Game File Path",
+            "description": "Path to the CoD 5 game files (has to be the same as the \"target\" of the mount)\r\nZone folder has to be mounted at \/home\/container\/zone as well",
+            "env_variable": "GAME_FILE_PATH",
+            "default_value": "\/mnt\/gamefiles\/cod5",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "required|string|max:40",
+            "field_type": "text"
+        },
+        {
+            "name": "Server mod",
+            "description": "Custom mod set for Server. Ex: mods\/openwarfare",
+            "env_variable": "SERVER_MODS",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string|max:30",
+            "field_type": "text"
+        },
+        {
+            "name": "Server Config File",
+            "description": "Server config file located at main folder.",
+            "env_variable": "SERVER_CONFIG_FILE",
+            "default_value": "server.cfg",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|min:1|max:20",
+            "field_type": "text"
+        },
+        {
+            "name": "Server Name",
+            "description": "Hostname of the server.",
+            "env_variable": "SERVER_NAME",
+            "default_value": "Pterodactyl CoD 5 Server",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:40",
+            "field_type": "text"
+        },
+        {
+            "name": "Server Password",
+            "description": "Password of the server.",
+            "env_variable": "SERVER_PASSWORD",
+            "default_value": "",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "nullable|string|max:20",
+            "field_type": "text"
+        },
+        {
+            "name": "Admin Password",
+            "description": "RCON password for the server.",
+            "env_variable": "ADMIN_PASSWORD",
+            "default_value": "passwort123",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "required|string|min:8|max:20",
+            "field_type": "text"
+        }
+    ]
+}
